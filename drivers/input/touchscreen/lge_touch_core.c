@@ -441,7 +441,7 @@ static int touch_ic_init(struct lge_touch_data *ts)
 		next_work = atomic_read(&ts->next_work);
 
 		if (unlikely(int_pin != 1 && next_work <= 0)) {
-			TOUCH_INFO_MSG("WARN: Interrupt pin is low"
+			TOUCH_INFO_MSG("WARN: (init)Interrupt pin is low"
 					" - next_work: %d, try_count: %d]\n",
 					next_work, ts->ic_init_err_cnt);
 			goto err_out_retry;
@@ -902,7 +902,7 @@ out:
 		next_work = atomic_read(&ts->next_work);
 
 		if (unlikely(int_pin != 1 && next_work <= 0)) {
-			TOUCH_INFO_MSG("WARN: Interrupt pin is low - "
+			TOUCH_INFO_MSG("WARN: (work)Interrupt pin is low - "
 					"next_work: %d, try_count: %d]\n",
 					next_work, ts->work_sync_err_cnt);
 			goto err_out_retry;
@@ -1901,6 +1901,7 @@ static void touch_psy_init(struct lge_touch_data *ts)
 	}
 }
 #endif
+
 #ifdef CONFIG_TOUCHSCREEN_SWEEP2WAKE
 static ssize_t lge_touch_sweep2wake_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
@@ -1912,7 +1913,7 @@ static ssize_t lge_touch_sweep2wake_show(struct device *dev,
 	return count;
 }
 
-static ssize_t lge_touch_sweep2wake_dump(struct device *dev,
+static ssize_t lge_touch_sweep2wake_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count)
 {
 	if (buf[0] >= '0' && buf[0] <= '2' && buf[1] == '\n')
@@ -1923,7 +1924,38 @@ static ssize_t lge_touch_sweep2wake_dump(struct device *dev,
 }
 
 static DEVICE_ATTR(sweep2wake, (S_IWUSR|S_IRUGO),
-	lge_touch_sweep2wake_show, lge_touch_sweep2wake_dump);
+	lge_touch_sweep2wake_show, lge_touch_sweep2wake_store);
+#endif
+
+#ifdef CONFIG_TOUCHSCREEN_LGE_BOOST
+static ssize_t lge_touch_boost_show(struct device *dev,
+		struct device_attribute *attr, char *buf)
+{
+	size_t count = 0;
+
+	count += sprintf(buf, "%d\n", lge_boost_level);
+
+	return count;
+}
+
+static ssize_t lge_touch_boost_dump(struct device *dev,
+		struct device_attribute *attr, const char *buf, size_t count)
+{
+	unsigned int boost = 0;
+
+	if (buf[1] == '\n')
+		boost = buf[0] - '0';
+
+	if(boost > (KGSL_MAX_PWRLEVELS - 2))
+		boost = 0;
+
+	lge_boost_level = boost;
+
+	return count;
+}
+
+static DEVICE_ATTR(boost, (S_IWUSR|S_IRUGO),
+	lge_touch_boost_show, lge_touch_boost_dump);
 #endif
 
 static struct kobject *android_touch_kobj;
@@ -2253,7 +2285,9 @@ static int touch_remove(struct i2c_client *client)
 	else {
 		hrtimer_cancel(&ts->timer);
 	}
-
+#ifdef CONFIG_TOUCHSCREEN_LGE_BOOST
+	del_timer(&boost_timer);
+#endif
 	input_unregister_device(ts->input_dev);
 	input_free_device(ts->input_dev);
 	kfree(ts);
@@ -2313,6 +2347,9 @@ static void touch_late_resume(struct early_suspend *h)
 			container_of(h, struct lge_touch_data, early_suspend);
 
 #ifdef CONFIG_TOUCHSCREEN_SWEEP2WAKE
+	int int_pin = 0;
+	int next_work = 0;
+
         scr_suspended = false;
 #endif
 
@@ -2349,8 +2386,26 @@ static void touch_late_resume(struct early_suspend *h)
         else
         {
                 disable_irq_wake(ts->client->irq);
-        }
+		/* Interrupt pin check after IC init - avoid Touch lockup */
+		if (ts->pdata->role->operation_mode == INTERRUPT_MODE) {
+			int_pin = gpio_get_value(ts->pdata->int_pin);
+			next_work = atomic_read(&ts->next_work);
+
+			if (unlikely(int_pin != 1 && next_work <= 0)) {
+				TOUCH_INFO_MSG("WARN: (s2w)Interrupt pin is low (Lockup detected) - next_work: %d, try_count: %d]\n",
+						next_work, ts->ic_init_err_cnt);
+				pr_warn("touch core: (s2w)disable irqs!\n");
+				disable_irq(ts->client->irq);
+				pr_warn("touch core: (s2w)release all Touch events!\n");
+				release_all_ts_event(ts);
+				pr_warn("touch core: (s2w)enable irqs!\n");
+				enable_irq(ts->client->irq);
+				pr_warn("touch core: (s2w)force IC init!\n");
+				touch_ic_init(ts);
+			}
+		}
         wake_from_s2w = false;
+	}
 #endif
 }
 #endif
@@ -2406,7 +2461,7 @@ int touch_driver_register(struct touch_device_driver* driver)
 
 	touch_device_func = driver;
 
-	touch_wq = create_workqueue("touch_wq");
+	touch_wq = create_singlethread_workqueue("touch_wq");
 	if (!touch_wq) {
 		TOUCH_ERR_MSG("CANNOT create new workqueue\n");
 		ret = -ENOMEM;
