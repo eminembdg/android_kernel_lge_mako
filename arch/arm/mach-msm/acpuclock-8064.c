@@ -36,8 +36,8 @@ static struct hfpll_data hfpll_data __initdata = {
         .nom_vdd_l_max = 42,
         .vdd[HFPLL_VDD_NONE] =       0,
         .vdd[HFPLL_VDD_LOW]  =  945000,
-        .vdd[HFPLL_VDD_NOM]  = 1050000,
-        .vdd[HFPLL_VDD_HIGH] = 1150000,
+        .vdd[HFPLL_VDD_NOM]  = 1000000,
+        .vdd[HFPLL_VDD_HIGH] = 1100000,
 };
 
 static struct scalable scalable[] __initdata = {
