@@ -574,9 +574,13 @@ endif # $(dot-config)
 # Defaults to vmlinux, but the arch makefile usually adds further targets
 all: vmlinux
 
+ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+KBUILD_CFLAGS	+= -Os
+else
 KBUILD_CFLAGS	+= -Ofast
 KBUILD_CFLAGS   += $(call cc-disable-warning,maybe-uninitialized) -fno-inline-functions
 KBUILD_CFLAGS   += $(call cc-disable-warning,array-bounds) 
+endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
 
