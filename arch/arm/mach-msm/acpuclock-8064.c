@@ -35,7 +35,7 @@ static struct hfpll_data hfpll_data __initdata = {
         .low_vdd_l_max = 22,
         .nom_vdd_l_max = 42,
         .vdd[HFPLL_VDD_NONE] =       0,
-        .vdd[HFPLL_VDD_LOW]  =  945000,
+        .vdd[HFPLL_VDD_LOW]  =  900000,
         .vdd[HFPLL_VDD_NOM]  = 1000000,
         .vdd[HFPLL_VDD_HIGH] = 1100000,
 };
@@ -160,7 +160,7 @@ static struct acpu_level tbl_slow[] __initdata = {
         { 1, {  1350000, HFPLL, 1, 0x32 }, L2(17), 1125000 },
         //{ 0, {  1404000, HFPLL, 1, 0x34 }, L2(14), 1237500 },
         //{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1237500 },
-        { 1, {  1512000, HFPLL, 1, 0x38 }, L2(17), 1150000 },
+        { 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1150000 },
         { 0, { 0 } }
 };
 
@@ -186,7 +186,7 @@ static struct acpu_level tbl_nom[] __initdata = {
         { 1, {  1350000, HFPLL, 1, 0x32 }, L2(17), 1075000 },
         //{ 0, {  1404000, HFPLL, 1, 0x34 }, L2(14), 1187500 },
         //{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1187500 },
-        { 1, {  1512000, HFPLL, 1, 0x38 }, L2(17), 1100000 },
+        { 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1100000 },
         { 0, { 0 } }
 };
 
@@ -212,7 +212,7 @@ static struct acpu_level tbl_fast[] __initdata = {
         { 1, {  1350000, HFPLL, 1, 0x32 }, L2(17), 1025000 },
         //{ 0, {  1404000, HFPLL, 1, 0x34 }, L2(14), 1137500 },
         //{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1137500 },
-        { 1, {  1512000, HFPLL, 1, 0x38 }, L2(17), 1050000 },
+        { 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1050000 },
         { 0, { 0 } }
 };
 
@@ -238,7 +238,7 @@ static struct acpu_level tbl_faster[] __initdata = {
         { 1, {  1350000, HFPLL, 1, 0x32 }, L2(17), 1000000 },
         //{ 0, {  1404000, HFPLL, 1, 0x34 }, L2(14), 1112500 },
         //{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1112500 },
-        { 1, {  1512000, HFPLL, 1, 0x38 }, L2(17), 1025000 },
+        { 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1025000 },
         { 0, { 0 } }
 };
 
