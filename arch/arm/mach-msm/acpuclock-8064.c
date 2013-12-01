@@ -47,7 +47,7 @@ static struct scalable scalable[] __initdata = {
                 .aux_clk_sel = 3,
                 .sec_clk_sel = 2,
                 .l2cpmr_iaddr = 0x4501,
-                .vreg[VREG_CORE] = { "krait0", 1200000 },
+                .vreg[VREG_CORE] = { "krait0", 1300000 },
                 .vreg[VREG_MEM]  = { "krait0_mem", 1150000 },
                 .vreg[VREG_DIG]  = { "krait0_dig", 1150000 },
                 .vreg[VREG_HFPLL_A] = { "krait0_hfpll", 1800000 },
@@ -58,7 +58,7 @@ static struct scalable scalable[] __initdata = {
                 .aux_clk_sel = 3,
                 .sec_clk_sel = 2,
                 .l2cpmr_iaddr = 0x5501,
-                .vreg[VREG_CORE] = { "krait1", 1200000 },
+                .vreg[VREG_CORE] = { "krait1", 1300000 },
                 .vreg[VREG_MEM]  = { "krait1_mem", 1150000 },
                 .vreg[VREG_DIG]  = { "krait1_dig", 1150000 },
                 .vreg[VREG_HFPLL_A] = { "krait1_hfpll", 1800000 },
@@ -69,7 +69,7 @@ static struct scalable scalable[] __initdata = {
                 .aux_clk_sel = 3,
                 .sec_clk_sel = 2,
                 .l2cpmr_iaddr = 0x6501,
-                .vreg[VREG_CORE] = { "krait2", 1200000 },
+                .vreg[VREG_CORE] = { "krait2", 1300000 },
                 .vreg[VREG_MEM]  = { "krait2_mem", 1150000 },
                 .vreg[VREG_DIG]  = { "krait2_dig", 1150000 },
                 .vreg[VREG_HFPLL_A] = { "krait2_hfpll", 1800000 },
@@ -80,7 +80,7 @@ static struct scalable scalable[] __initdata = {
                 .aux_clk_sel = 3,
                 .sec_clk_sel = 2,
                 .l2cpmr_iaddr = 0x7501,
-                .vreg[VREG_CORE] = { "krait3", 1200000 },
+                .vreg[VREG_CORE] = { "krait3", 1300000 },
                 .vreg[VREG_MEM]  = { "krait3_mem", 1150000 },
                 .vreg[VREG_DIG]  = { "krait3_dig", 1150000 },
                 .vreg[VREG_HFPLL_A] = { "krait3_hfpll", 1800000 },
@@ -162,6 +162,9 @@ static struct acpu_level tbl_slow[] __initdata = {
         //{ 0, {  1404000, HFPLL, 1, 0x34 }, L2(14), 1237500 },
         //{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1237500 },
         { 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1150000 },
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(18), 1275000 },
+        { 1, {  1728000, HFPLL, 1, 0x40 }, L2(18), 1300000 },
+        { 1, {  1836000, HFPLL, 1, 0x44 }, L2(18), 1312500 },
         { 0, { 0 } }
 };
 
@@ -188,6 +191,9 @@ static struct acpu_level tbl_nom[] __initdata = {
         //{ 0, {  1404000, HFPLL, 1, 0x34 }, L2(14), 1187500 },
         //{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1187500 },
         { 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1100000 },
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(18), 1225000 },
+        { 1, {  1728000, HFPLL, 1, 0x40 }, L2(18), 1250000 },
+        { 1, {  1836000, HFPLL, 1, 0x44 }, L2(18), 1275000 },
         { 0, { 0 } }
 };
 
@@ -214,6 +220,9 @@ static struct acpu_level tbl_fast[] __initdata = {
         //{ 0, {  1404000, HFPLL, 1, 0x34 }, L2(14), 1137500 },
         //{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1137500 },
         { 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1050000 },
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(18), 1175000 },
+        { 1, {  1728000, HFPLL, 1, 0x40 }, L2(18), 1200000 },
+        { 1, {  1836000, HFPLL, 1, 0x44 }, L2(18), 1212500 },
         { 0, { 0 } }
 };
 
@@ -240,6 +249,9 @@ static struct acpu_level tbl_faster[] __initdata = {
         //{ 0, {  1404000, HFPLL, 1, 0x34 }, L2(14), 1112500 },
         //{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1112500 },
         { 1, {  1512000, HFPLL, 1, 0x38 }, L2(18), 1025000 },
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(18), 1150000 },
+        { 1, {  1728000, HFPLL, 1, 0x40 }, L2(18), 1175000 },
+        { 1, {  1836000, HFPLL, 1, 0x44 }, L2(18), 1187500 },
         { 0, { 0 } }
 };
 
