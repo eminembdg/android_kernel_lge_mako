@@ -43,7 +43,7 @@ time make -j16;
 
 if [ -e ./arch/arm/boot/zImage ] ;
 then
-cp ./arch/arm/boot/zImage -f ../../../device/lge/mako-kernel/zImage;
+cp ./arch/arm/boot/zImage -f ../../../device/lge/mako-kernel/kernel;
  echo "Kernel build finished, Continuing with ROM build";
  echo "";
 else
